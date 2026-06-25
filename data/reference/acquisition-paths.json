@@ -1,0 +1,38 @@
+[
+  {
+    "name": "SAM.gov Contract Opportunities",
+    "type": "Solicitation",
+    "whenToUse": "Use for active and planned contract opportunities with contracting-office visibility.",
+    "liveSource": true
+  },
+  {
+    "name": "SBIR / STTR",
+    "type": "Innovation Funding",
+    "whenToUse": "Best for early government traction, technical validation, and non-dilutive prototyping capital.",
+    "liveSource": true
+  },
+  {
+    "name": "OTA / Consortium",
+    "type": "Rapid Acquisition",
+    "whenToUse": "Useful for prototypes, pilots, and commercial solutions when speed and flexibility matter.",
+    "liveSource": false
+  },
+  {
+    "name": "CRADA / PIA / Lab Evaluation",
+    "type": "Collaboration",
+    "whenToUse": "Strong for testing, joint development, and credibility building with labs or mission teams.",
+    "liveSource": false
+  },
+  {
+    "name": "Tradewinds / DIU / SCO",
+    "type": "Transition Bridge",
+    "whenToUse": "Good for venture-backed companies with commercial traction and a near-term prototype story.",
+    "liveSource": false
+  },
+  {
+    "name": "Prime / Teaming / GSA Vehicles",
+    "type": "Channel Strategy",
+    "whenToUse": "Useful when direct-to-government sales are slower than piggybacking on existing vehicles or incumbents.",
+    "liveSource": false
+  }
+]

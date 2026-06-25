@@ -1,0 +1,42 @@
+[
+  {
+    "key": "dod",
+    "label": "DoD",
+    "missions": ["warfighting readiness", "mission systems", "command and control", "resilience"]
+  },
+  {
+    "key": "intelligence-community",
+    "label": "Intelligence Community",
+    "missions": ["analysis", "collection", "sensing", "counterintelligence", "mission support"]
+  },
+  {
+    "key": "dhs-cisa",
+    "label": "DHS / CISA",
+    "missions": ["critical infrastructure", "threat hunting", "civilian cyber defense", "incident response"]
+  },
+  {
+    "key": "army",
+    "label": "Army",
+    "missions": ["land operations", "logistics", "sustainment", "fires", "force protection"]
+  },
+  {
+    "key": "navy-marine-corps",
+    "label": "Navy / Marine Corps",
+    "missions": ["maritime awareness", "expeditionary operations", "shipboard systems", "contested logistics"]
+  },
+  {
+    "key": "air-force-space-force",
+    "label": "Air Force / Space Force",
+    "missions": ["air operations", "space support", "battle management", "resilient comms"]
+  },
+  {
+    "key": "socom",
+    "label": "SOCOM",
+    "missions": ["irregular warfare", "sensitive operations", "edge autonomy", "ISR"]
+  },
+  {
+    "key": "civilian-federal",
+    "label": "Civilian Federal",
+    "missions": ["service delivery", "critical infrastructure", "research", "public safety"]
+  }
+]

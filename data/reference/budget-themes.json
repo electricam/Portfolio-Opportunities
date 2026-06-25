@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cyber-critical-infrastructure",
+    "title": "Cyber / Zero Trust / Critical Infrastructure",
+    "summary": "Supports cyber defense, resilient networks, zero-trust modernization, and protection of operationally critical infrastructure.",
+    "signals": ["cybersecurity", "malware", "threat", "network", "critical infrastructure", "zero trust", "devsecops"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "science-and-technology",
+    "title": "Science & Technology",
+    "summary": "Aligns with research, prototyping, transition activities, and technology maturation for future warfighting advantage.",
+    "signals": ["research", "s&t", "prototype", "r&d", "science", "testing", "labs"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "autonomous-systems",
+    "title": "Autonomous and Remotely Operated Systems",
+    "summary": "Matches systems that extend reach, reduce manpower burden, or improve mission tempo through autonomy.",
+    "signals": ["autonomy", "robotics", "uav", "uas", "uncrewed", "remote", "swarm"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "space-capabilities",
+    "title": "Space Capabilities",
+    "summary": "Fits space domain awareness, resilient space infrastructure, launch support, and orbital mission enablement.",
+    "signals": ["space", "satellite", "orbital", "pnt", "space domain awareness", "launch"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "long-range-weapons",
+    "title": "Long-Range Weapons",
+    "summary": "Relevant where sensing, targeting, EW, autonomy, or manufacturing supports strike systems and kill chains.",
+    "signals": ["targeting", "weapons", "fires", "munition", "sensor fusion", "ew", "strike"],
+    "priority": "medium",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "defense-industrial-base",
+    "title": "Defense Industrial Base",
+    "summary": "Covers manufacturing scale, supply chain resilience, sustainment, and production-readiness initiatives.",
+    "signals": ["manufacturing", "supply chain", "industrial base", "production", "resilience", "logistics"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  },
+  {
+    "id": "rapid-prototyping",
+    "title": "DIU / Rapid Prototyping",
+    "summary": "Strong fit for commercially mature capabilities that can move through fast pilot, prototype, or transition pathways.",
+    "signals": ["diu", "prototype", "rapid", "commercial", "pilot", "transition", "sco"],
+    "priority": "high",
+    "sourceLabel": "FY26 DoD Budget Request Overview Book (user-provided reference)"
+  }
+]

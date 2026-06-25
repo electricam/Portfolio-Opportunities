@@ -1,0 +1,42 @@
+[
+  {
+    "id": "operators",
+    "title": "Direct-to-Operator Discovery",
+    "summary": "Start with frontline users to validate pain, mission pull, and deployment friction before broad acquisition mapping.",
+    "targetRoles": ["Operators", "Mission users", "Analysts", "Unit innovation cells"],
+    "recommendedPaths": ["Exercise support", "Pilot", "Operational demo", "Foreign comparative signal if relevant"],
+    "sourceLabel": "DoW Directory framing (user-provided reference)"
+  },
+  {
+    "id": "program-executives",
+    "title": "PAE / CPE / PEO / Program Office Engagement",
+    "summary": "Map the office that can sponsor transition, budgeting, integration, and scaling after user pull is clear.",
+    "targetRoles": ["PEO", "PEO staff", "PAE", "CPE", "Program manager", "Mission owner"],
+    "recommendedPaths": ["Program office intro", "Transition funding ask", "Capability brief", "Requirements alignment"],
+    "sourceLabel": "DoW Directory framing (user-provided reference)"
+  },
+  {
+    "id": "innovation-bridges",
+    "title": "Innovation and Fast-Path Vehicles",
+    "summary": "Use rapid-entry mechanisms when the company is earlier-stage, venture-backed, or still proving government-market fit.",
+    "targetRoles": ["DIU", "SCO", "AFWERX", "NavalX", "Army Applications Lab", "Tradewinds"],
+    "recommendedPaths": ["CSO/OTA", "Challenge-based intake", "Commercial solutions opening", "Tech scouting"],
+    "sourceLabel": "DoW Directory framing (user-provided reference)"
+  },
+  {
+    "id": "contracting-and-research",
+    "title": "SBIR / OTA / CRADA / PIA / Lab Pathways",
+    "summary": "Pair customer discovery with a contracting path that fits the maturity, IP position, and demonstration needs.",
+    "targetRoles": ["SBIR PMs", "Contracting offices", "Labs", "FFRDC/UARC partners", "Consortium managers"],
+    "recommendedPaths": ["SBIR/STTR", "OTA consortium", "CRADA", "PIA", "Lab evaluation"],
+    "sourceLabel": "DoW Directory framing (user-provided reference)"
+  },
+  {
+    "id": "prime-teaming",
+    "title": "Prime / Vehicle / Channel Strategy",
+    "summary": "When direct award probability is low, use incumbents, vehicles, and channel partners to shorten time to access.",
+    "targetRoles": ["Prime BD teams", "Set-aside vehicle holders", "GSA MAS/HACS partners", "Systems integrators"],
+    "recommendedPaths": ["Subcontracting", "Teaming", "Reseller motion", "Vehicle access"],
+    "sourceLabel": "DoW Directory framing (user-provided reference)"
+  }
+]
