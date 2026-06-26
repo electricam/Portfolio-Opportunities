@@ -6,7 +6,7 @@ import { BudgetAlignment } from "@/lib/types";
 export function BudgetAlignmentChart({ items }: { items: BudgetAlignment[] }) {
   const data = items.map((item) => ({
     name: item.title.replace("Autonomous and ", "").replace(" / Rapid Prototyping", ""),
-    score: item.score,
+    score: Math.round(item.confidence * 100),
   }));
 
   return (

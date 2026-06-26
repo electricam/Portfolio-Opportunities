@@ -10,9 +10,8 @@ export type TargetAgency =
   | "civilian-federal";
 
 export type CapabilityTag =
-  | "AI / ML"
   | "Cybersecurity"
-  | "Malware Analysis"
+  | "AI / ML"
   | "Autonomy"
   | "Space"
   | "ISR"
@@ -26,24 +25,84 @@ export type CapabilityTag =
   | "Quantum"
   | "Software / DevSecOps"
   | "Data Infrastructure"
+  | "Defense Industrial Base"
   | "Other";
 
-export type SourceStatus = "live" | "demo" | "disabled";
+export type SourceStatus = "live" | "demo" | "disabled" | "error" | "needs-api-key";
 
-export interface IntakePayload {
-  companyName: string;
+export interface AdvancedOptions {
+  targetMarketOverride?: string;
+  forceAgencyFocus?: TargetAgency | "auto";
+  includeCivilianAgencies: boolean;
+  includeHistoricalAwards: boolean;
+  includeGrants: boolean;
+  includeSbir: boolean;
+  includeDodOnlySources: boolean;
+}
+
+export interface DashboardRequest {
   websiteUrl: string;
-  companyDescription: string;
-  targetAgency: TargetAgency;
-  capabilityTags: CapabilityTag[];
+  advancedOptions?: AdvancedOptions;
+  manualText?: string;
+}
+
+export interface WebsiteExtract {
+  url: string;
+  title: string;
+  metaDescription: string;
+  pagesFetched: Array<{
+    url: string;
+    title: string;
+    status: "fetched" | "skipped" | "error";
+  }>;
+  headings: string[];
+  visibleText: string;
+  linksDiscovered: string[];
+  extractionStatus: "success" | "partial" | "error";
+  errors: string[];
+}
+
+export interface CompanyProfile {
+  id: string;
+  name: string;
+  websiteUrl: string;
+  websiteTitle: string;
+  websiteDescription: string;
+  extractedWebsiteText: string;
+  oneLineDescription: string;
+  governmentValueProposition: string;
+  sector: string;
+  capabilityTags: string[];
+  technologyKeywords: string[];
+  missionKeywords: string[];
+  likelyAgencies: string[];
+  likelyGovernmentUsers: string[];
+  maturitySignals: string[];
+  commercialTractionSignals: string[];
+  deploymentSignals: string[];
+  caveats: string[];
+  generatedAt: string;
+  sourceConfidence: number;
+}
+
+export interface SearchPlan {
+  samQueries: string[];
+  sbirQueries: string[];
+  usaspendingQueries: string[];
+  grantsQueries: string[];
+  stakeholderQueries: string[];
+  budgetThemes: string[];
+  agencyFilters: string[];
+  naicsCandidates: string[];
+  pscCandidates: string[];
 }
 
 export interface TranslationRow {
-  capability: string;
+  websiteLanguage: string;
   missionTranslation: string;
   likelyUser: string;
-  evidence: string[];
-  priority: "high" | "medium" | "low";
+  searchKeywords: string[];
+  confidence: number;
 }
 
 export interface Opportunity {
@@ -72,44 +131,67 @@ export interface Opportunity {
   isHistorical?: boolean;
 }
 
+export interface AgencyFit {
+  agency: string;
+  officeType: string;
+  whyTheyCare: string;
+  evidence: string[];
+  matchScore: number;
+  suggestedFirstConversation: string;
+}
+
+export interface StakeholderMapItem {
+  role: string;
+  whyRelevant: string;
+  likelyAsk: string;
+  sourceEvidence: string;
+  confidence: number;
+  caveat: string;
+}
+
+export interface AcquisitionPathwayRecommendation {
+  name: string;
+  fitScore: number;
+  whyItFits: string;
+  requiredMaturity: string;
+  likelyBuyer: string;
+  nextAction: string;
+  sourceLink?: string;
+  sourceStatus: SourceStatus;
+}
+
 export interface BudgetAlignment {
   title: string;
-  summary: string;
-  rationale: string;
-  score: number;
+  whyItMatters: string;
+  companyRelevance: string;
+  keywords: string[];
+  confidence: number;
   sourceLabel: string;
 }
 
-export interface StakeholderRecommendation {
-  title: string;
-  summary: string;
-  targetRoles: string[];
-  recommendedPaths: string[];
-  whyNow: string;
+export interface EvidenceItem {
+  sourceTitle: string;
+  url?: string;
+  sourceType: string;
+  usedFor: string;
+  lastChecked: string;
+  confidence: number;
 }
 
-export interface RadarResponse {
+export interface DashboardData {
   generatedAt: string;
-  companyName: string;
-  valueProposition: string;
-  targetAgencies: string[];
-  capabilityTags: string[];
-  keywords: string[];
-  topOpportunityScore: number;
-  firstTarget: string;
-  dataFreshnessNote: string;
+  websiteExtract: WebsiteExtract;
+  companyProfile: CompanyProfile;
+  searchPlan: SearchPlan;
   translations: TranslationRow[];
   opportunities: Opportunity[];
+  agencyFits: AgencyFit[];
+  stakeholderMap: StakeholderMapItem[];
+  acquisitionPathways: AcquisitionPathwayRecommendation[];
   budgetAlignment: BudgetAlignment[];
-  stakeholders: StakeholderRecommendation[];
-  acquisitionPathways: Array<{
-    name: string;
-    type: string;
-    whenToUse: string;
-    status: SourceStatus;
-  }>;
+  evidence: EvidenceItem[];
   actionPlan: Array<{
-    phase: "30 Days" | "60 Days" | "90 Days";
+    phase: "0-30 Days" | "30-60 Days" | "60-90 Days";
     items: string[];
   }>;
   sourceNotes: string[];

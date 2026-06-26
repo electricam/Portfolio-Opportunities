@@ -1,60 +1,73 @@
 import {
   deriveAcquisitionPathways,
   deriveActionPlan,
+  deriveAgencyFits,
   deriveBudgetAlignment,
-  deriveKeywords,
-  deriveStakeholders,
-  deriveTargetAgencies,
+  deriveEvidence,
+  deriveSourceNotes,
+  deriveStakeholderMap,
   deriveTranslations,
-  deriveValueProp,
 } from "@/lib/analysis";
+import { classifyCompany } from "@/lib/agents/classifyCompany";
+import { generateSearchPlan } from "@/lib/agents/generateSearchPlan";
 import { fetchGrantsSignals } from "@/lib/sources/grants";
 import { fetchSamOpportunities } from "@/lib/sources/sam";
 import { fetchSbirSignals } from "@/lib/sources/sbir";
 import { fetchUsaSpendingSignals } from "@/lib/sources/usaspending";
-import { IntakePayload, RadarResponse } from "@/lib/types";
+import { scoreOpportunity } from "@/lib/scoring/opportunityScore";
+import { fetchWebsite } from "@/lib/website/fetchWebsite";
+import { DashboardData, DashboardRequest } from "@/lib/types";
 
-export async function generateRadar(payload: IntakePayload): Promise<RadarResponse> {
-  const keywords = deriveKeywords(payload);
-  const translations = deriveTranslations(payload, keywords);
-  const targetAgencies = deriveTargetAgencies(payload, keywords);
-  const budgetAlignment = deriveBudgetAlignment(keywords);
-  const stakeholders = deriveStakeholders(keywords);
+export async function analyzeWebsite(request: DashboardRequest) {
+  return fetchWebsite(request.websiteUrl, request.manualText);
+}
+
+export async function classifyWebsite(request: DashboardRequest) {
+  const extract = await analyzeWebsite(request);
+  return classifyCompany(extract);
+}
+
+export async function buildSearchPlan(request: DashboardRequest) {
+  const extract = await analyzeWebsite(request);
+  const profile = await classifyCompany(extract);
+  return generateSearchPlan(profile);
+}
+
+export async function generateDashboard(request: DashboardRequest): Promise<DashboardData> {
+  const websiteExtract = await analyzeWebsite(request);
+  const companyProfile = await classifyCompany(websiteExtract);
+  const searchPlan = generateSearchPlan(companyProfile);
 
   const [sam, sbir, spending, grants] = await Promise.all([
-    fetchSamOpportunities(payload, keywords),
-    fetchSbirSignals(payload, keywords),
-    fetchUsaSpendingSignals(payload, keywords),
-    fetchGrantsSignals(),
+    fetchSamOpportunities(companyProfile, searchPlan),
+    request.advancedOptions?.includeSbir === false ? Promise.resolve([]) : fetchSbirSignals(companyProfile, searchPlan),
+    request.advancedOptions?.includeHistoricalAwards === false
+      ? Promise.resolve([])
+      : fetchUsaSpendingSignals(companyProfile, searchPlan),
+    fetchGrantsSignals(request.advancedOptions?.includeGrants ?? true),
   ]);
 
   const opportunities = [...sam, ...sbir, ...spending, ...grants]
+    .map((opportunity) => ({
+      ...opportunity,
+      matchScore: scoreOpportunity(opportunity, companyProfile, searchPlan),
+    }))
     .sort((left, right) => right.matchScore - left.matchScore)
-    .slice(0, 8);
-
-  const topOpportunityScore = opportunities[0]?.matchScore ?? 0;
-  const firstTarget = stakeholders[0]?.targetRoles[0] ?? "Mission user";
+    .slice(0, 10);
 
   return {
     generatedAt: new Date().toISOString(),
-    companyName: payload.companyName,
-    valueProposition: deriveValueProp(payload, keywords),
-    targetAgencies,
-    capabilityTags: payload.capabilityTags,
-    keywords,
-    topOpportunityScore,
-    firstTarget,
-    dataFreshnessNote: "Source-linked signals should be refreshed before external use.",
-    translations,
+    websiteExtract,
+    companyProfile,
+    searchPlan,
+    translations: deriveTranslations(companyProfile, searchPlan),
     opportunities,
-    budgetAlignment,
-    stakeholders,
-    acquisitionPathways: deriveAcquisitionPathways(),
-    actionPlan: deriveActionPlan(payload, targetAgencies[0] ?? "DoD", firstTarget),
-    sourceNotes: [
-      "FY26 budget themes are derived from the user-provided budget document as a strategy layer.",
-      "Stakeholder pathways are framed from the user-provided DoW Directory reference and intentionally avoid republishing directory content.",
-      "SAM.gov, SBIR.gov, USAspending.gov, and Grants.gov adapters are stubbed to fail gracefully into demo or disabled states.",
-    ],
+    agencyFits: deriveAgencyFits(companyProfile, searchPlan),
+    stakeholderMap: deriveStakeholderMap(companyProfile),
+    acquisitionPathways: deriveAcquisitionPathways(companyProfile),
+    budgetAlignment: deriveBudgetAlignment(companyProfile),
+    evidence: deriveEvidence(companyProfile, searchPlan),
+    actionPlan: deriveActionPlan(companyProfile),
+    sourceNotes: deriveSourceNotes(),
   };
 }

@@ -13,9 +13,8 @@ export const TARGET_AGENCY_OPTIONS: Array<{ value: TargetAgency; label: string }
 ];
 
 export const CAPABILITY_OPTIONS: CapabilityTag[] = [
-  "AI / ML",
   "Cybersecurity",
-  "Malware Analysis",
+  "AI / ML",
   "Autonomy",
   "Space",
   "ISR",
@@ -29,5 +28,16 @@ export const CAPABILITY_OPTIONS: CapabilityTag[] = [
   "Quantum",
   "Software / DevSecOps",
   "Data Infrastructure",
+  "Defense Industrial Base",
   "Other",
 ];
+
+export const DEFAULT_ADVANCED_OPTIONS = {
+  includeCivilianAgencies: true,
+  includeHistoricalAwards: true,
+  includeGrants: true,
+  includeSbir: true,
+  includeDodOnlySources: false,
+  forceAgencyFocus: "auto" as const,
+  targetMarketOverride: "",
+};

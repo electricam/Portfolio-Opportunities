@@ -11,12 +11,18 @@ import { formatDate } from "@/lib/utils";
 function statusColor(status: Opportunity["sourceStatus"]) {
   if (status === "live") return "bg-emerald-50 text-emerald-700 border-emerald-200";
   if (status === "demo") return "bg-amber-50 text-amber-700 border-amber-200";
+  if (status === "needs-api-key") return "bg-blue-50 text-blue-700 border-blue-200";
+  if (status === "error") return "bg-rose-50 text-rose-700 border-rose-200";
   return "bg-slate-100 text-slate-600 border-slate-200";
 }
 
 export function OpportunityList({ opportunities }: { opportunities: Opportunity[] }) {
   const [selectedId, setSelectedId] = useState(opportunities[0]?.id);
   const selected = opportunities.find((item) => item.id === selectedId) ?? opportunities[0];
+
+  if (opportunities.length === 0) {
+    return <p className="text-sm text-slate-600">No opportunity signals were generated for this run.</p>;
+  }
 
   return (
     <div className="space-y-5">
@@ -93,7 +99,7 @@ export function OpportunityList({ opportunities }: { opportunities: Opportunity[
 
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
             <InfoBlock title="Keywords" values={selected.extractedKeywords} />
-            <InfoBlock title="Why the Company Fits" values={[selected.whyFit]} />
+            <InfoBlock title="Why It Matters" values={[selected.whyFit]} />
             <InfoBlock title="Caveats" values={selected.caveats} />
           </div>
         </Card>

@@ -1,11 +1,10 @@
-import { IntakePayload, Opportunity } from "@/lib/types";
-import { getDemoSbirOpportunities } from "@/lib/sources/demo-opportunities";
+import { CompanyProfile, Opportunity, SearchPlan } from "@/lib/types";
+import { getDemoUsaSpendingSignals } from "@/lib/sources/demo-opportunities";
 
-export async function fetchUsaSpendingSignals(payload: IntakePayload, keywords: string[]): Promise<Opportunity[]> {
+export async function fetchUsaSpendingSignals(profile: CompanyProfile, plan: SearchPlan): Promise<Opportunity[]> {
   try {
-    const demo = getDemoSbirOpportunities(payload, keywords).filter((item) => item.source === "USAspending.gov");
-    return demo;
+    return getDemoUsaSpendingSignals(profile, plan);
   } catch {
-    return getDemoSbirOpportunities(payload, keywords).filter((item) => item.source === "USAspending.gov");
+    return getDemoUsaSpendingSignals(profile, plan);
   }
 }

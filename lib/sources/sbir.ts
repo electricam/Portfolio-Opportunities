@@ -1,11 +1,10 @@
-import { IntakePayload, Opportunity } from "@/lib/types";
-import { getDemoSbirOpportunities } from "@/lib/sources/demo-opportunities";
+import { CompanyProfile, Opportunity, SearchPlan } from "@/lib/types";
+import { getDemoSbirSignals } from "@/lib/sources/demo-opportunities";
 
-export async function fetchSbirSignals(payload: IntakePayload, keywords: string[]): Promise<Opportunity[]> {
+export async function fetchSbirSignals(profile: CompanyProfile, plan: SearchPlan): Promise<Opportunity[]> {
   try {
-    // MVP stub: treat this as the contract for future wiring while keeping the app demo-ready today.
-    return getDemoSbirOpportunities(payload, keywords);
+    return getDemoSbirSignals(profile, plan);
   } catch {
-    return getDemoSbirOpportunities(payload, keywords);
+    return getDemoSbirSignals(profile, plan);
   }
 }

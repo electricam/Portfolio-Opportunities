@@ -1,14 +1,11 @@
-import { IntakePayload, Opportunity } from "@/lib/types";
+import { CompanyProfile, Opportunity, SearchPlan } from "@/lib/types";
 import { getDemoSamOpportunities } from "@/lib/sources/demo-opportunities";
 
 const SAM_ENDPOINT = "https://api.sam.gov/prod/opportunities/v2/search";
 
-export async function fetchSamOpportunities(payload: IntakePayload, keywords: string[]): Promise<Opportunity[]> {
+export async function fetchSamOpportunities(profile: CompanyProfile, plan: SearchPlan): Promise<Opportunity[]> {
   const apiKey = process.env.SAM_GOV_API_KEY;
-
-  if (!apiKey) {
-    return getDemoSamOpportunities(payload, keywords);
-  }
+  if (!apiKey) return getDemoSamOpportunities(profile, plan);
 
   try {
     const params = new URLSearchParams({
@@ -16,25 +13,17 @@ export async function fetchSamOpportunities(payload: IntakePayload, keywords: st
       limit: "10",
       offset: "0",
       postedFrom: new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).toISOString().slice(0, 10),
-      q: keywords.slice(0, 5).join(" "),
+      q: plan.samQueries.slice(0, 5).join(" "),
     });
 
     const response = await fetch(`${SAM_ENDPOINT}?${params.toString()}`, {
       method: "GET",
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
-    if (!response.ok) {
-      return getDemoSamOpportunities(payload, keywords);
-    }
-
-    const data = (await response.json()) as {
-      opportunitiesData?: Array<Record<string, string>>;
-    };
-
-    if (!data.opportunitiesData?.length) {
-      return getDemoSamOpportunities(payload, keywords);
-    }
+    if (!response.ok) return getDemoSamOpportunities(profile, plan);
+    const data = (await response.json()) as { opportunitiesData?: Array<Record<string, string>> };
+    if (!data.opportunitiesData?.length) return getDemoSamOpportunities(profile, plan);
 
     return data.opportunitiesData.slice(0, 6).map((item, index) => ({
       id: `sam-live-${index}`,
@@ -51,16 +40,16 @@ export async function fetchSamOpportunities(payload: IntakePayload, keywords: st
       vehicle: item.typeOfSetAside,
       naics: item.naicsCode,
       psc: item.classificationCode,
-      descriptionSummary: item.description?.slice(0, 280) ?? "Live SAM.gov opportunity.",
-      extractedKeywords: keywords.slice(0, 5),
-      whyFit: "Live match generated from keyword overlap and agency relevance.",
-      buyerHypothesis: "Use the notice metadata to identify the most likely sponsoring office and acquisition strategy.",
-      recommendedAction: "Review the live notice, confirm fit, and tailor a capability brief to the named office.",
-      confidence: 0.79,
-      caveats: ["Live result normalization is intentionally lightweight for MVP."],
-      matchScore: 76 - index * 3,
+      descriptionSummary: item.description?.slice(0, 320) ?? "Live SAM.gov opportunity.",
+      extractedKeywords: plan.samQueries.slice(0, 5),
+      whyFit: "Live opportunity relevance inferred from website-derived search language and agency alignment.",
+      buyerHypothesis: "Use the named notice and office metadata to identify the most likely sponsorship path.",
+      recommendedAction: "Review the live notice and validate mission fit before external use.",
+      confidence: 0.8,
+      caveats: ["Live normalization is intentionally lightweight in the MVP."],
+      matchScore: 75 - index * 3,
     }));
   } catch {
-    return getDemoSamOpportunities(payload, keywords);
+    return getDemoSamOpportunities(profile, plan);
   }
 }
